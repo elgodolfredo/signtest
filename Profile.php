@@ -2,19 +2,6 @@
 require_once('connection.php');
 require_once('sessionSet.php');
 ?>
-<!-- Only Admin Can Add User-->
-<?php
-if ($_SESSION['role'] !== 'Admin') {
-    ?>
-<script>
-    setTimeout(function() {
-        window.location.href = 'index.php';
-    });
-
-</script>
-<?php
-    }
-?>
 <!DOCTYPE html>
 <html>
 <!--Head-->
@@ -55,41 +42,38 @@ if ($_SESSION['role'] !== 'Admin') {
                             <!-- general form elements -->
                             <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title">Edit User</h3>
+                                    <h3 class="card-title">Edit Profile</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!--Fetch User Data-->
-                                <?php  
-                                    if(isset($_GET['userID']))
-                                    {
-                                        $userID =  $_GET['userID'];
-                                        $userDataQ = "select * from users where id='$userID'";
-                                        $userDataQR = mysqli_query($con,$userDataQ);
-                                        $userDataRow = mysqli_fetch_assoc($userDataQR);
-                                        $userID=$userDataRow['id'];
-                                        $userFullName=$userDataRow['username'];
-                                        $userEmail = $userDataRow['email'];
-                                        $userPassword = $userDataRow['password'];
-                                        $userRole = $userDataRow['role'];
-                                    }      
+                                <?php
+if(isset($_SESSION['Email']))
+{
+	$userEmailSession= $_SESSION['Email'];
+    $complaintDataQ = "select * from users where email='$userEmailSession'";
+    $complaintDataQR = mysqli_query($con,$complaintDataQ);
+    $complaintDataRow = mysqli_fetch_assoc($complaintDataQR);
+    $userID=$complaintDataRow['id'];
+    $userFullName=$complaintDataRow['username'];
+    $userEmail = $complaintDataRow['email'];
+    $userPassword = $complaintDataRow['password'];
+    $userRole = $complaintDataRow['role'];
+}
 
-                                ?>
+?>
                                 <!-- form start -->
                                 <form role="form" method="post" action="updateUser.php">
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label for="InputEmail">User Name</label>
                                             <input type="hidden" class="form-control" id="InputUserID" name="userid" value="<?php echo $userID; ?>">
-                                            <input type="text" class="form-control" id="InputEmail" name="email" value="<?php echo $userEmail; ?>" readonly> </div>
+                                            <input type="text" class="form-control" id="InputEmail" placeholder="Enter User Name" name="email" value="<?php echo $userEmail; ?>" readonly> </div>
                                         <div class="form-group">
                                             <label for="InputFullName">Full Name</label>
-                                            <input type="text" class="form-control" id="InputFullName" name="username" value="<?php echo $userFullName; ?>"> </div>
+                                            <input type="text" class="form-control" id="InputFullName" placeholder="Enter email" name="username" value="<?php echo $userFullName; ?>"> </div>
                                         <div class="form-group">
                                             <label for="InputPassword">Password</label>
-                                            <input type="text" class="form-control" id="InputPassword" name="password" value="<?php echo $userPassword; ?>"> </div>
-                                        <div class="form-group">
-                                            <label for="InputRole">Role</label>
-                                            <input type="text" class="form-control" id="InputRole" name="role" value="<?php echo $userRole; ?>" readonly> </div>
+                                            <input type="text" class="form-control" id="InputPassword" placeholder="Password" name="password" value="<?php echo $userPassword; ?>"> </div>
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">

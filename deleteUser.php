@@ -3,8 +3,22 @@
     require_once('connection.php');
     include('Head.php');
 ?>
-    <?php 
-if(isset($_GET['userID']))
+<!-- Only Admin Can Delete User-->
+<?php
+if ($_SESSION['role'] !== 'Admin') {
+    ?>
+<script>
+    setTimeout(function() {
+        window.location.href = 'index.php';
+    });
+
+</script>
+<?php
+    }
+?>
+<!--deleteUser Php Code-->
+<?php 
+if(isset($_GET['userID']) && isset($_SESSION['Admin']))
 {
 	$complaintID =  $_GET['userID'];
 	
@@ -15,14 +29,15 @@ if(isset($_GET['userID']))
 	if($complaintIDQR)
 	{
 		
-		echo "<center><h3 class=\"text-center\">Complaint deleted.</h3></center>";
+		echo "<center><h3 class=\"text-center\">User Deleted Successfully</h3></center>";
 		?>
-        <script>
-            setTimeout(function () {
-                window.location.href = 'viewUsers.php';
-            }, 1000);
-        </script>
-        <?php
+<script>
+    setTimeout(function() {
+        window.location.href = 'viewUsers.php';
+    }, 1000);
+
+</script>
+<?php
 	}
 	else
 	{
@@ -30,3 +45,4 @@ if(isset($_GET['userID']))
 	}
 	
 }?>
+<!--/ delete User-->

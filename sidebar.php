@@ -25,7 +25,7 @@ $userName = $_SESSION['Name'];
                with font-awesome or any other icon font library -->
                 <!--Add Candidate-->
                 <li class="nav-item has-treeview SIGNTESTERHIDE">
-                    <a href="#" class="nav-link active"> <i class="nav-icon far fa-plus-square"></i>
+                    <a href="addCandidate.php" class="nav-link active"> <i class="nav-icon far fa-plus-square"></i>
                         <p> Add Candidate </p>
                     </a>
                 </li>
