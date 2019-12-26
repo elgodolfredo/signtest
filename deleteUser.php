@@ -18,7 +18,7 @@ if ($_SESSION['role'] !== 'Admin') {
 ?>
 <!--deleteUser Php Code-->
 <?php 
-if(isset($_GET['userID']) && isset($_SESSION['Admin']))
+if(isset($_GET['userID']))
 {
 	$complaintID =  $_GET['userID'];
 	

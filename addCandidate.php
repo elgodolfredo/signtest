@@ -20,21 +20,28 @@ if ($_SESSION['role'] !== 'Admin') {
                         if(isset($_POST['submit']))
                         {
                             
-                            $userEmail = CleanData($_POST['email']);
-                            $userName = CleanData($_POST['username']);	
-                            $userRole = CleanData($_POST['role']);
-                            $userPassword = CleanData($_POST['password']);
+                            $candidateCNIC = CleanData($_POST['candidatecnic']);
+                            $candidateName = CleanData($_POST['candidatename']);	
+                            $candidateFatherName = CleanData($_POST['candidatefathername']);
+                            $candidateEmail = CleanData($_POST['candidateemail']);
+                            $candidatePhone = CleanData($_POST['candidatephone']);
+                            $candidateBloodGroup = CleanData($_POST['candidatebloodgroup']);
+                            $candidateAddress = CleanData($_POST['candidateaddress']);
+                            $candidateLPNo = CleanData($_POST['candidatelpno']);
+                            $candidateLPDate = CleanData($_POST['candidatelpdate']);
+                            $candidateLicenseCategory = CleanData($_POST['licensecategory']);
+                            $candidateTicketCost = CleanData($_POST['candidateticketcost']);
                         
-                            $regComplaintQ = "INSERT INTO users(username,email,password,role) VALUES('$userName','$userEmail','$userPassword','$userRole')";
-                            $regComplaintQR = mysqli_query($con,$regComplaintQ);
+                            $addCandidateQ = "INSERT INTO candidates(cnic,name,fathername,phone,address,bloodgroup,lpno,lpdate,liccat,tktcost,email) VALUES('$candidateCNIC','$candidateName','$candidateFatherName','$candidatePhone','$candidateAddress','$candidateBloodGroup','$candidateLPNo','$candidateLPDate','$candidateLicenseCategory','$candidateTicketCost','$candidateEmail')";
+                            $addCandidateQR = mysqli_query($con,$addCandidateQ);
 
-                                if($regComplaintQR)
+                                if($addCandidateQR)
                                 {       
                                     echo "<center><h3>User Added <span style='color: green;'>Successfully</h3></center>";
                                     ?>
 <script>
     setTimeout(function() {
-        window.location.href = 'viewUsers.php';
+        window.location.href = 'index.php';
     }, 2000);
 
 </script>
@@ -47,6 +54,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                 }
 
                             }
+                            
                         ?>
 <!--/ PHP Code: add User -->
 <!DOCTYPE html>
@@ -93,7 +101,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form class="needs-validation" role="form" method="post" action="addUsers.php" novalidate>
+                                <form class="needs-validation" role="form" method="post" action="addCandidate.php" novalidate>
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="form-group col">
@@ -136,7 +144,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="InputBlood">Blood Group</label>
-                                                <select class="form-control" id="InputBlood" name="bloodgroup" required>
+                                                <select class="form-control" id="InputBlood" name="candidatebloodgroup" required>
                                                     <option value="A+">A+</option>
                                                     <option value="AB+">AB+</option>
                                                     <option value="B+">B+</option>
@@ -161,7 +169,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-3">
+                                            <div class="form-group col-md-2">
                                                 <label for="InputPassword">Learner Permit No.</label>
                                                 <input type="text" class="form-control" id="InputLPno" placeholder="Learner Permit Number" name="candidatelpno" required> <small id="passwordHelpBlock" class="text-muted">
                                                     Enter first Learner No here in case of renewal
@@ -171,7 +179,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <label for="InputPassword">Learner Permit Issue Date</label>
-                                                <input type="text" class="form-control" id="InputLPdate" placeholder="Learner Permit Date" name="candidatelpdate" required> <small id="passwordHelpBlock" class="text-muted">
+                                                <input type="date" class="form-control" id="InputLPdate" placeholder="Learner Permit Date" name="candidatelpdate" required> <small id="passwordHelpBlock" class="text-muted">
                                                     Enter first Learner's issue date in case of renewal
                                                 </small>
                                                 <div class="invalid-feedback"> Please Enter Learner Permit Issue Date </div>
@@ -199,7 +207,17 @@ if ($_SESSION['role'] !== 'Admin') {
                                                 <div class="invalid-feedback"> Please choose License Category </div>
                                                 <div class="valid-feedback"> Looks good! </div>
                                             </div>
-                                            <div class="form-group col-md-3">
+                                            <div class="form-group col-md-2">
+                                                <label for="InputPassword">Special Case</label>
+                                                <select class="form-control" id="InputBlood" name="specialcase" required>
+                                                    <option value="Renewal">Renewal</option>
+                                                    <option value="L.P.C">LPC</option>
+                                                    <option value="Already Passed">Already Passed</option>
+                                                </select>
+                                                <div class="invalid-feedback"> Please choose Special Case </div>
+                                                <div class="valid-feedback"> Looks good! </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
                                                 <label for="InputTicketCost">Ticket Cost</label>
                                                 <input type="text" class="form-control" id="InputTicketCost" placeholder="Tickets Cost" name="candidateticketcost" required>
                                                 <div class="invalid-feedback"> Please Enter Tickets Cost </div>
