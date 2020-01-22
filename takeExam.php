@@ -5,7 +5,7 @@ extract($_POST);
 extract($_GET);
 extract($_SESSION);
 ?>
-<?php
+    <?php
     $candidateID = $_SESSION['candidateID'];
     $candidateName = $_SESSION['candidateName'];
     $candidateToken = $_SESSION['candidateToken'];
@@ -13,7 +13,7 @@ extract($_SESSION);
     $candidateLicenseCategory = $_SESSION['candidateLicenseCategory'];
     $candidateCNIC = $_SESSION['candidateCNIC'];
 ?>
-<?php
+        <?php
 $wrongAnswers=0;
 $correctAnswers=0;
 $questionNum=0;
@@ -30,53 +30,51 @@ else{
 
 //echo "Name:  "; echo $candidateName; echo "CNIC: "; echo $candidateCNIC; echo " Token #: "; echo $candidateToken; echo " Total Questions: "; echo $questionsLength;
 ?>
-<!--/ PHP Code: Token Entery -->
-<!DOCTYPE html>
-<html>
-<!--Head-->
-<?php include('Head.php')?>
-<!--/Head-->
-<!--Body-->
+            <!--/ PHP Code: Token Entery -->
+            <!DOCTYPE html>
+            <html>
+            <!--Head-->
+            <?php include('Head.php')?>
+                <!--/Head-->
+                <!--Body-->
 
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        <!-- Navbar -->
-        <?php include('topNav.php') ?>
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
-        <?php include ('sidebar.php')?>
-        <!--/ Main Sidebar Container-->
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0 text-dark">Dashboard</h1>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
-            <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid">
-                    <!-- Small boxes (Stat box) -->
-                    <div class="row">
-                        <div class="col-12">
-                            <!-- general form elements -->
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">Sign Test: <?php echo "CNIC: <b>". $candidateCNIC. "</b> Name : <b>".$candidateName."</b>";?></h3>
-                                </div>
-                                <!-- /.card-header -->
-                                <!-- Test -->
-                                <!--Fetch Questions-->
-                                <?php
+                <body class="hold-transition sidebar-mini layout-fixed">
+                    <div class="wrapper">
+                        <!-- Navbar -->
+                        <?php include('topNav.php') ?>
+                            <!-- /.navbar -->
+                            <!-- Main Sidebar Container -->
+                            <?php include ('sidebar.php')?>
+                                <!--/ Main Sidebar Container-->
+                                <!-- Content Wrapper. Contains page content -->
+                                <div class="content-wrapper">
+                                    <!-- Content Header (Page header) -->
+                                    <div class="content-header">
+                                        <div class="container-fluid">
+                                            <div class="row mb-2">
+                                                <div class="col-sm-6">
+                                                    <h1 class="m-0 text-dark">Dashboard</h1> </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.container-fluid -->
+                                    </div>
+                                    <!-- /.content-header -->
+                                    <!-- Main content -->
+                                    <section class="content">
+                                        <div class="container-fluid">
+                                            <!-- Small boxes (Stat box) -->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <!-- general form elements -->
+                                                    <div class="card card-primary">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">Sign Test: <?php echo "CNIC: <b>". $candidateCNIC. "</b> Name : <b>".$candidateName."</b>";?></h3> </div>
+                                                        <!-- /.card-header -->
+                                                        <!-- Test -->
+                                                        <!--Fetch Questions-->
+                                                        <?php
 
 $query="select * from questions";
 
@@ -97,7 +95,7 @@ else
             //Save User Answer
                 mysqli_data_seek($fetchQuestionsQR,$_SESSION['questionNum']);
 				$row= mysqli_fetch_row($fetchQuestionsQR);
-				mysqli_query($con,"insert into useranswers(sess_id,que_des, ans1,ans2,ans3,ans4,correctopt,useropt) values ('".session_id()."','$row[1]','$row[2]','$row[3]','$row[4]', '$row[5]','$row[6]','$ans')");
+				mysqli_query($con,"insert into useranswers(sess_id,candidateid,que_des, ans1,ans2,ans3,ans4,correctopt,useropt) values ('".session_id()."','$candidateID','$row[1]','$row[2]','$row[3]','$row[4]', '$row[5]','$row[6]','$ans')");
 				if($ans==$row[6])
 				{
 							$_SESSION['trueans']=$_SESSION['trueans']+1;
@@ -108,7 +106,7 @@ else
 		{
 				mysqli_data_seek($fetchQuestionsQR,$_SESSION['questionNum']);
 				$row= mysqli_fetch_row($fetchQuestionsQR);	
-				mysqli_query($con,"insert into useranswers(sess_id,que_des, ans1,ans2,ans3,ans4,correctopt,useropt) values ('".session_id()."','$row[1]','$row[2]','$row[3]','$row[4]', '$row[5]','$row[6]','$ans')");
+				mysqli_query($con,"insert into useranswers(sess_id,candidateid,que_des, ans1,ans2,ans3,ans4,correctopt,useropt) values ('".session_id()."','$candidateID','$row[1]','$row[2]','$row[3]','$row[4]', '$row[5]','$row[6]','$ans')");
 				if($ans==$row[6])
 				{
 							$_SESSION['trueans']=$_SESSION['trueans']+1;
@@ -120,7 +118,7 @@ else
 				$wrong=$_SESSION['questionNum']-$_SESSION['trueans'];
 				echo "<tr class=fans><td>Wrong Answer<td> ". $wrong;
 				echo "</table>";
-				mysqli_query($con,"insert into mst_result(login,test_id,test_date,score) values('$login',$tid,'".date("d/m/Y")."',$_SESSION['trueans'])") or die(mysqli_error());
+				//mysqli_query($con,"insert into mst_result(login,test_id,test_date,score) values('$login',$tid,'".date("d/m/Y")."',$_SESSION['trueans'])") or die(mysqli_error());
 				echo "<h1 align=center><a href=review.php> Review Question</a> </h1>";
 				unset($_SESSION['questionNum']);
 				unset($_SESSION['trueans']);
@@ -156,30 +154,30 @@ echo "<tr><td><input type=submit name=getresult value='Get Result'></form>";
 echo "</table></table>";
     }
 ?>
-                                <!--/ Test-->
-                            </div>
-                            <!-- /.card -->
-                        </div>
+                                                            <!--/ Test-->
+                                                    </div>
+                                                    <!-- /.card -->
+                                                </div>
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.container-fluid -->
+                                    </section>
+                                    <!-- /.content -->
+                                </div>
+                                <!-- /.content-wrapper -->
+                                <!--Footer Content-->
+                                <?php include ('footer.php')?>
+                                    <!--/Footer Content-->
+                                    <!-- Control Sidebar -->
+                                    <aside class="control-sidebar control-sidebar-dark">
+                                        <!-- Control sidebar content goes here -->
+                                    </aside>
+                                    <!-- /.control-sidebar -->
                     </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
-        <!--Footer Content-->
-        <?php include ('footer.php')?>
-        <!--/Footer Content-->
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
-    <?php include ('footerPlugins.php')?>
-</body>
-<!--/Body-->
+                    <!-- ./wrapper -->
+                    <?php include ('footerPlugins.php')?>
+                </body>
+                <!--/Body-->
 
-</html>
+            </html>

@@ -236,6 +236,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                                                     </div>
                                                                     <!--/.card-footer-->
                                                                 </form>
+                                                                <!-- form ends -->
                                                             </div>
                                                             <!-- /.card -->
                                                         </div>

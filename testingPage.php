@@ -1,22 +1,133 @@
-<div class="col-12 col-sm-6 col-lg-4">
-    <div class="card card-primary card-tabs">
-        <div class="card-header p-0 pt-1">
-            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                <li class="nav-item"> <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Home</a> </li>
-                <li class="nav-item"> <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Profile</a> </li>
-                <li class="nav-item"> <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Messages</a> </li>
-                <li class="nav-item"> <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Settings</a> </li>
-            </ul>
+<?php 
+	
+	include('connection.php');
+	
+	if(isset($_POST['submit']))
+	{
+ 
+		$targetFolder = "images";
+		$errorMsg = array();
+		$successMsg = array();
+ 
+		foreach($_FILES as $file => $fileArray)
+		{
+			
+			if(!empty($fileArray['name']) && $fileArray['error'] == 0)
+			{
+				$getFileExtension = pathinfo($fileArray['name'], PATHINFO_EXTENSION);;
+ 
+				if(($getFileExtension =='jpg') || ($getFileExtension =='jpeg') || ($getFileExtension =='png') || ($getFileExtension =='gif'))
+				{
+					if ($fileArray["size"] <= 500000) 
+					{
+						$breakImgName = explode(".",$fileArray['name']);
+						$imageOldNameWithOutExt = $breakImgName[0];
+						$imageOldExt = $breakImgName[1];
+ 
+						$newFileName = strtotime("now")."-".str_replace(" ","-",strtolower($imageOldNameWithOutExt)).".".$imageOldExt;
+ 
+						
+						$targetPath = $targetFolder."/".$newFileName;
+ 
+						
+						if (move_uploaded_file($fileArray["tmp_name"], $targetPath)) 
+						{
+							
+							$qry ="insert into images (image) values ('".$newFileName."')";
+ 
+ 
+							$rs  = mysqli_query($con, $qry);
+ 
+							if($rs)
+							{
+								$successMsg[$file] = "Image is uploaded successfully";
+							}
+							else
+							{
+								$errorMsg[$file] = "Unable to save ".$file." file ";
+							}
+						}
+						else
+						{
+							$errorMsg[$file] = "Unable to save ".$file." file ";		
+						}
+					} 
+					else
+					{
+						$errorMsg[$file] = "Image size is too large in ".$file;
+					}
+ 
+				}
+				else
+				{
+					$errorMsg[$file] = 'Only image file can be uploaded';
+				}	
+			}
+			
+		}
+	}
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>how to upload multiple images in php and store in mysql database</title>
+    <link rel="stylesheet" href="style.css" type='text/css'>
+</head>
+
+<body>
+    <div class="form-container">
+        <?php 
+		if(isset($successMsg) && !empty($successMsg))
+		{
+			echo "<div class='success-msg'>";
+			foreach($successMsg as $sMsg)
+			{
+				echo $sMsg."<br>";
+			}
+			echo "</div>";
+		}
+	?>
+        <?php 
+		if(isset($errorMsg) && !empty($errorMsg))
+		{
+			echo "<div class='error-msg'>";
+			foreach($errorMsg as $eMsg)
+			{
+				echo $eMsg."<br>";
+			}
+ 
+			echo "</div>";
+		}
+	?>
+        <div class="add-more-cont">
+            <a id="moreImg"><img src="img/add_icon.jpg">Add Image</a>
         </div>
-        <div class="card-body">
-            <div class="tab-content" id="custom-tabs-one-tabContent">
-                <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur. </div>
-                <!--/tab-pane-->
-                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab"> Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam. </div>
-                <!--/tab-pane-->
-            </div>
-            <!--/tab-content-->
-        </div>
-        <!-- /.card -->
+        <form name="uploadFile" action="" method="post" enctype="multipart/form-data" id="upload-form">
+            <div class="input-files">
+                <input type="file" name="questionImg"> </div>
+            <input type="submit" name="submit" value="submit">
+        </form>
     </div>
-</div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var id = 0;
+            $("#moreImg").click(function() {
+                var showId = ++id;
+                if (showId <= 1) {
+                    $(".input-files").append('<h3>Q: ' + showId + '</h3><input type="file" name="opt-' + showId + '">');
+                    ++showId;
+                    $(".input-files").append('<h3>Q: ' + showId + '</h3><input type="file" name="opt-' + showId + '">');
+                    ++showId;
+                    $(".input-files").append('<h3>Q: ' + showId + '</h3><input type="file" name="opt-' + showId + '">');
+                    ++showId;
+                    $(".input-files").append('<h3>Q: ' + showId + '</h3><input type="file" name="opt-' + showId + '">');
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
