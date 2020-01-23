@@ -1,9 +1,9 @@
 <?php session_start();
 require_once('connection.php');
 require_once('sessionSet.php');
-extract($_POST);
-extract($_GET);
-extract($_SESSION);
+// extract($_POST);
+// extract($_GET);
+// extract($_SESSION);
 ?>
 <!--/ PHP Code: Token Entery -->
 <!DOCTYPE html>
